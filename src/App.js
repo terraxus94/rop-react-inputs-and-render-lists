@@ -20,21 +20,18 @@ class TaskInputBar extends Component {
       },
       tasks: [],
     };
-
-    this.handleTaskSubmit = this.handleTaskSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange(e) {
+  handleChange = (e) => {
     this.setState({
       task: {
         text: e.target.value,
         id: this.state.task.id,
       },
     });
-  }
+  };
 
-  handleTaskSubmit(e) {
+  handleTaskSubmit = (e) => {
     e.preventDefault();
     this.setState({
       tasks: this.state.tasks.concat(this.state.task),
@@ -43,7 +40,20 @@ class TaskInputBar extends Component {
         id: uniqid(),
       },
     });
-  }
+  };
+
+  handleTaskDelete = (taskID) => {
+    console.log(taskID);
+    const currentTasks = this.state.tasks;
+    const newTasks = currentTasks.filter((task) => {
+      if (task.id !== taskID) {
+        return task;
+      }
+    });
+    this.setState({
+      tasks: newTasks,
+    });
+  };
 
   render() {
     const { task, tasks } = this.state;
@@ -57,7 +67,7 @@ class TaskInputBar extends Component {
           ></input>
           <button type={'submit'}>Add task</button>
         </form>
-        <TasksList tasks={tasks} />
+        <TasksList tasks={tasks} onDeleteTask={this.handleTaskDelete} />
       </div>
     );
   }
